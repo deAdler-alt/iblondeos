@@ -1,17 +1,20 @@
 // client/src/App.js
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import './App.css'; // Importujemy nasz nowy layout CSS
-
-// Importujemy nasze nowe komponenty
+import './App.css'; 
 import SpaceScene from './components/SpaceScene';
 import Sidebar from './components/Sidebar';
+
+// --- NOWE IMPORTY ---
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import stylów CSS dla toastów
 
 const SOCKET_SERVER_URL = "http://localhost:3001";
 const socket = io(SOCKET_SERVER_URL);
 
 function App() {
   const [satellites, setSatellites] = useState([]);
+  const [selectedSatId, setSelectedSatId] = useState(null); 
 
   useEffect(() => {
     socket.on('initial_state', (data) => {
@@ -26,7 +29,19 @@ function App() {
     socket.on('alert', (alertData) => {
       console.warn('--- NEW ALERT ---');
       console.warn(alertData.message);
-      // W przyszłości możemy tu pokazać popup
+      
+      // --- NOWA AKCJA ---
+      // Wywołujemy powiadomienie "toast"
+      // Używamy typu 'warn' (ostrzeżenie), który jest pomarańczowy
+      toast.warn(alertData.message, {
+        position: "top-right",
+        autoClose: 5000, // Zamknij po 5 sekundach
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark", // Użyj ciemnego motywu!
+      });
     });
 
     socket.on('connect', () => console.log('Connected to backend socket! ID:', socket.id));
@@ -42,7 +57,6 @@ function App() {
   }, []);
 
   return (
-    // Używamy klas CSS z App.css do budowy layoutu
     <div className="app-container">
       
       <header className="app-header">
@@ -50,14 +64,25 @@ function App() {
       </header>
 
       <main className="main-content">
-        {/* Przekazujemy listę satelitów do komponentu 3D */}
-        <SpaceScene satellites={satellites} />
+        <SpaceScene 
+          satellites={satellites} 
+          selectedSatId={selectedSatId}
+          setSelectedSatId={setSelectedSatId}
+        />
       </main>
 
       <aside className="sidebar">
-        {/* Przekazujemy listę satelitów do panelu bocznego */}
-        <Sidebar satellites={satellites} />
+        <Sidebar 
+          satellites={satellites} 
+          selectedSatId={selectedSatId}
+          setSelectedSatId={setSelectedSatId}
+        />
       </aside>
+
+      {/* --- NOWY KOMPONENT --- */}
+      {/* Ten komponent musi być gdzieś w drzewie DOM, 
+          ale sam renderuje się w odpowiednim rogu ekranu */}
+      <ToastContainer />
 
     </div>
   );

@@ -1,47 +1,58 @@
 // client/src/components/Satellite.js
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 
-// To jest komponent dla JEDNEGO satelity
-const Satellite = ({ position, status }) => {
-  // ref da nam bezpośredni dostęp do obiektu <mesh>
+const Satellite = ({ position, status, id, setSelectedSatId }) => {
   const meshRef = useRef();
   
-  // Zdefiniujmy kolory
-  const operationalColor = '#00ff00'; // zielony
-  const threatColor = '#ff0000'; // czerwony
+  const operationalColor = '#00ff00'; 
+  const threatColor = '#ff0000'; 
   
-  // Użyj 'useFrame' do animacji (wykonuje się przy każdej klatce)
   useFrame((state, delta) => {
-    // Niech się lekko obraca dla "efektu"
+    if (!meshRef.current) return; 
     meshRef.current.rotation.y += delta * 0.5;
 
-    // A co najważniejsze: PULSOWANIE przy zagrożeniu
     if (status === 'threat_detected') {
-      // Użyj fali sinusoidalnej do płynnego pulsowania skalą
       const scale = 1 + Math.sin(state.clock.elapsedTime * 5) * 0.5;
       meshRef.current.scale.set(scale, scale, scale);
     } else {
-      // Ustaw domyślną skalę, jeśli nie ma zagrożenia
       meshRef.current.scale.set(1, 1, 1);
     }
   });
 
+  const handleClick = (event) => {
+    event.stopPropagation(); 
+    setSelectedSatId(id);
+  };
+
+  const handlePointerOver = (event) => {
+    event.stopPropagation();
+    document.body.style.cursor = 'pointer'; 
+  };
+
+  const handlePointerOut = (event) => {
+    event.stopPropagation();
+    document.body.style.cursor = 'default'; 
+  };
+
+  // --- ZMIANA JEST TUTAJ ---
+  // Zielone satelity będą teraz miały lekką poświatę (0.5),
+  // a czerwone zachowają mocną (2).
+  const intensity = status === 'threat_detected' ? 2 : 0.5;
+
   return (
     <mesh
       ref={meshRef}
-      // Używamy pozycji z naszych danych backendowych
-      // Dzielimy przez 10, żeby nie były tak daleko od Ziemi
       position={[position.x / 10, position.y / 10, position.z / 10]}
+      onClick={handleClick}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut} 
     >
-      {/* Kształt: mała kula */}
       <sphereGeometry args={[0.5, 16, 16]} /> 
-      
-      {/* Materiał: kolor zależy od statusu */}
       <meshStandardMaterial 
         color={status === 'threat_detected' ? threatColor : operationalColor} 
-        emissive={status === 'threat_detected' ? threatColor : operationalColor} // Sprawia, że "świeci"
-        emissiveIntensity={status === 'threat_detected' ? 2 : 0}
+        emissive={status === 'threat_detected' ? threatColor : operationalColor} 
+        emissiveIntensity={intensity} // <-- ZASTOSOWANIE ZMIENNEJ
       />
     </mesh>
   );

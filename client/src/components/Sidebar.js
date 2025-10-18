@@ -1,23 +1,22 @@
 // client/src/components/Sidebar.js
 import React from 'react';
-import './Sidebar.css'; // Importujemy nasz nowy plik CSS
+import './Sidebar.css';
 
-const Sidebar = ({ satellites }) => {
+// NEW: Props now include selectedSatId and its setter
+const Sidebar = ({ satellites, selectedSatId, setSelectedSatId }) => {
   
-  // 1. Filtrujemy satelity, aby wyodrębnić tylko te z aktywnym zagrożeniem
   const activeThreats = satellites.filter(sat => sat.status === 'threat_detected');
-  
-  // 2. Liczymy statystyki
   const operationalCount = satellites.length - activeThreats.length;
   const threatCount = activeThreats.length;
 
   return (
     <div className="sidebar-container">
 
-      {/* --- Sekcja 1: Status Ogólny --- */}
+      {/* --- Sekcja 1: Status Ogólny (bez zmian) --- */}
       <div className="sidebar-section">
         <h2>Mission Status</h2>
         <div className="status-grid">
+          {/* ... (ta sekcja pozostaje bez zmian) ... */}
           <div className="status-item">
             Tracking
             <span>{satellites.length}</span>
@@ -33,7 +32,7 @@ const Sidebar = ({ satellites }) => {
         </div>
       </div>
 
-      {/* --- Sekcja 2: Aktywne Alerty --- */}
+      {/* --- Sekcja 2: Aktywne Alerty (bez zmian) --- */}
       <div className="sidebar-section">
         <h2>Active Alerts</h2>
         <div className="list-container">
@@ -42,6 +41,7 @@ const Sidebar = ({ satellites }) => {
           ) : (
             activeThreats.map(threatSat => (
               <div key={threatSat.id} className="alert-item">
+                {/* ... (ta sekcja pozostaje bez zmian) ... */}
                 <strong>{threatSat.name} ({threatSat.id})</strong>
                 <span>Type: {threatSat.threat.type}</span><br />
                 <span>Source: {threatSat.threat.source}</span><br />
@@ -52,15 +52,21 @@ const Sidebar = ({ satellites }) => {
         </div>
       </div>
 
-      {/* --- Sekcja 3: Lista Wszystkich Satelitów --- */}
+      {/* --- Sekcja 3: Lista Wszystkich Satelitów (TUTAJ ZMIANY) --- */}
       <div className="sidebar-section">
         <h2>All Assets</h2>
         <div className="list-container">
           {satellites.map(sat => (
             <div 
               key={sat.id} 
-              // Dodajemy klasy CSS w zależności od statusu
-              className={`satellite-item ${sat.status === 'threat_detected' ? 'threat' : 'operational'}`}
+              // NEW: Add 'selected' class if this satellite is the selected one
+              className={`
+                satellite-item 
+                ${sat.status === 'threat_detected' ? 'threat' : 'operational'}
+                ${sat.id === selectedSatId ? 'selected' : ''}
+              `}
+              // NEW: Add onClick handler to set this satellite as selected
+              onClick={() => setSelectedSatId(sat.id)}
             >
               <strong>{sat.name} ({sat.id})</strong>
               <span>Status: {sat.status}</span>

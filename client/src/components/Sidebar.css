@@ -93,3 +93,16 @@
   color: #888;
   font-style: italic;
 }
+
+/* Dodaj na końcu client/src/components/Sidebar.css */
+
+.satellite-item.selected {
+  background: #4a4a6a;
+  border-left-color: #00d9ff;
+  box-shadow: 0 0 10px #00d9ff;
+}
+
+.satellite-item:hover {
+  cursor: pointer;
+  background: #3a3a5a;
+}
