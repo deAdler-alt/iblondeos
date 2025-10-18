@@ -1,7 +1,5 @@
 # iBlondeOS - Orbital Shield Interface
 
-**A real-time 3D web dashboard for detecting, analyzing, and visualizing threats to space assets. Built by a one-man-army for the hackathon.**
-
 ---
 
 ## The Problem
