@@ -1,0 +1,16 @@
+/* client/src/components/Graph.css */
+.graph-label {
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: monospace;
+  /* Zapobiega przechwytywaniu kliknięć myszy */
+  pointer-events: none; 
+}
+
+.graph-label.threat {
+  color: #ff0000;
+  border: 1px solid #ff0000;
+}

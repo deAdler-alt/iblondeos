@@ -1,19 +1,19 @@
 // client/src/components/SpaceScene.js
 import React, { Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sky } from '@react-three/drei'; // Usunąłem Stars, zakładam że Sky/alternatywa działa
+import { OrbitControls, Stars } from '@react-three/drei'; // <-- PRZYWRACAMY <Stars>
 import Satellite from './Satellite'; 
-import ThreatObject from './ThreatObject'; // <-- NOWY IMPORT
+import ThreatObject from './ThreatObject';
+import OrbitalGraph from './OrbitalGraph'; // <-- NOWY IMPORT
 import * as THREE from 'three';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
-// --- Komponent Ziemi (bez zmian) ---
+// --- Komponent Ziemi (czysty) ---
 const Earth = () => {
-  // const earthTexture = useTexture('/textures/earth.jpg'); // Zakładam, że tego nie robiliśmy
   return (
     <mesh position={[0, 0, 0]}>
       <sphereGeometry args={[2, 32, 32]} /> 
-      <meshStandardMaterial color="#0077ff" /> {/* Wracamy do niebieskiej kuli */}
+      <meshStandardMaterial color="#0077ff" /> 
     </mesh>
   );
 };
@@ -42,34 +42,28 @@ const CameraFocusController = ({ satellites, selectedSatId }) => {
 
 const SpaceScene = ({ satellites, selectedSatId, setSelectedSatId }) => {
   
-  // --- NOWA LOGIKA ---
-  // Filtrujemy listę satelitów, aby dostać tylko aktywne zagrożenia
   const activeThreats = satellites.filter(s => s.status === 'threat_detected' && s.threat);
 
   return (
     <Canvas camera={{ position: [0, 10, 30], fov: 60 }}>
+      {/* Suspense nadal tu jest, ale nic już nie powinno crashować */}
       <Suspense fallback={null}> 
         
         <ambientLight intensity={0.2} /> 
         <pointLight position={[10, 10, 10]} intensity={1} /> 
 
-        {/* --- Tło --- */}
-        {/* Zostawiam tu kod <Sky>, ale jeśli go pominęliśmy, to tło będzie czarne */}
-        {/* Możesz tu wkleić komponent <Stars> z kroku 6, jeśli chcesz */}
-        <Sky
-          distance={450000}
-          sunPosition={[0, 0, 0]}
-          inclination={0}
-          azimuth={0.25}
-          turbidity={0}
-          rayleigh={0}
-          mieCoefficient={0}
-          mieDirectionalG={0}
+        {/* --- PRZYWRÓCONE GWIAZDY --- */}
+        <Stars 
+          radius={100} 
+          depth={50} 
+          count={5000} 
+          factor={4} 
+          saturation={0} 
+          fade 
         />
         
         <Earth />
 
-        {/* Renderowanie naszych satelitów (bez zmian) */}
         {satellites.map(sat => (
           <Satellite 
             key={sat.id} 
@@ -80,13 +74,15 @@ const SpaceScene = ({ satellites, selectedSatId, setSelectedSatId }) => {
           />
         ))}
 
-        {/* --- NOWA SEKCJA: Renderowanie Obiektów Zagrożeń --- */}
         {activeThreats.map(threatenedSat => (
           <ThreatObject
             key={`threat-${threatenedSat.id}`}
             threat={threatenedSat.threat}
           />
         ))}
+
+        {/* --- DODAJEMY GRAF TUTAJ --- */}
+        <OrbitalGraph satellites={satellites} />
 
         <CameraFocusController 
           satellites={satellites} 
