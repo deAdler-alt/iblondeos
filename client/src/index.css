@@ -1,13 +1,17 @@
+/* client/src/index.css */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  
+  /* Nasz globalny "kosmiczny" styl */
+  background-color: #0c0c16; /* Bardzo ciemny granat/czerń */
+  color: #e0e0e0; /* Jasnoszary tekst */
+  overflow: hidden; /* Ukryj paski przewijania, chcemy pełny ekran */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Użyjemy 'border-box' dla łatwiejszego zarządzania rozmiarem */
+*, *:before, *:after {
+  box-sizing: border-box;
 }

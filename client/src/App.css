@@ -1,0 +1,50 @@
+/* client/src/App.css */
+
+/* Definiujemy naszą główną "siatkę" (Grid) dla całej aplikacji */
+.app-container {
+  display: grid;
+  /* 2 kolumny: główna (auto) i sidebar (350px) */
+  grid-template-columns: 1fr 350px; 
+  /* 2 wiersze: nagłówek (60px) i reszta (auto) */
+  grid-template-rows: 60px 1fr;
+  /* Definiujemy nazwy naszych obszarów */
+  grid-template-areas:
+    "header header"
+    "main sidebar";
+  height: 100vh; /* 100% wysokości ekranu */
+  width: 100vw;  /* 100% szerokości ekranu */
+}
+
+/* Styl nagłówka */
+.app-header {
+  grid-area: header; /* Przypisz do obszaru "header" */
+  background: rgba(20, 20, 30, 0.8); /* Lekko przezroczyste tło */
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #00d9ff; /* Neonowy niebieski */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Styl głównego okna (tam będzie 3D) */
+.main-content {
+  grid-area: main; /* Przypisz do obszaru "main" */
+  background: #000; /* Scena 3D będzie na czarnym tle */
+  position: relative; /* Ważne dla Canvas 3D */
+}
+
+/* Styl panelu bocznego */
+.sidebar {
+  grid-area: sidebar; /* Przypisz do obszaru "sidebar" */
+  background: #11111b;
+  border-left: 1px solid #333;
+  padding: 20px;
+  overflow-y: auto; /* Pozwól przewijać, jeśli lista będzie długa */
+}
