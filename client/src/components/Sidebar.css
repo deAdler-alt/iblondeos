@@ -1,0 +1,95 @@
+/* client/src/components/Sidebar.css */
+
+.sidebar-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  margin-bottom: 20px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #1a1a26;
+  padding: 10px 15px;
+}
+
+.sidebar-section h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #00d9ff; /* Neonowy niebieski */
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.status-item {
+  background: #2a2a3a;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.status-item span {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Kolory dla statusów */
+.status-operational { color: #4caf50; }
+.status-threat { color: #f44336; }
+
+
+/* Lista alertów i satelitów */
+.list-container {
+  overflow-y: auto;
+  flex-grow: 1; /* Sprawia, że ten kontener wypełnia resztę miejsca */
+  max-height: calc(100vh - 400px); /* Ogranicz wysokość, aby pasowała */
+}
+
+.satellite-item, .alert-item {
+  background: #2a2a3a;
+  border: 1px solid #444;
+  border-left-width: 4px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Kolorowa lewa ramka w zależności od statusu */
+.satellite-item.operational { border-left-color: #4caf50; }
+.satellite-item.threat { border-left-color: #f44336; }
+
+.satellite-item strong {
+  display: block;
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Specjalny styl dla alertów */
+.alert-item {
+  border-left-color: #f44336;
+  animation: pulse-border 1.5s infinite;
+}
+
+.alert-item strong {
+  color: #f44336;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+  70% { box-shadow: 0 0 5px 10px rgba(244, 67, 54, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+}
+
+.no-alerts {
+  color: #888;
+  font-style: italic;
+}
