@@ -47,8 +47,8 @@ To get a local copy up and running, follow these simple steps.
 
 1.  **Clone the repo:**
     ```sh
-    git clone [github.com/deAdler-alt/iblondeos](https://github.com/deAdler-alt/iblondeos.git)
-    cd 
+    git clone https://github.com/deAdler-alt/iblondeos.git
+    cd iblondeos
     ```
 
 2.  **Set up the Backend (Terminal 1):**
